@@ -1,0 +1,27 @@
+language: generic   #specifies the language to display output
+sudo: required      #establish sudo privilage when travis is working for us
+services:
+  - docker          #require docker engine
+before_install: 
+  - docker build -t chuk05/react-test:latest -f ./client/Dockerfile.dev ./client  #tell travis to build the image first and to use Dockerfile when deploying which is standard
+script:
+  - docker run -e CI=true chuk05/react-test npm test # https://create-react-app.dev/docs/running-tests/#linux-macos-bash
+after_success: 
+  - docker build -t chuk05/multi-client ./client
+  - docker build -t chuk05/multi-ngnix ./nginx
+  - docker build -t chuk05/multi-server ./server
+  - docker build -t chuk05/multi-worker ./worker
+# deploy:
+#   provider: elasticbeanstalk
+#   # user settings/Enviromental variables/*add* access_key_id and then secret_access_key to define your secrets
+#   access_key_id: #$"env_name"
+#   secret_access_key: #$"env_name"
+#   # env_name ends
+#   bucket: #"bucket beanstalk created when provisioning your enviroment"
+#   bucket_path: #"Location within Bucket to upload app to — type: string"
+#   edge: true # opt in to dpl v2
+#   region: #"AWS Region the Elastic Beanstalk app is running in — type: string, default: us-east-1"
+#   app: #"Elastic Beanstalk application name — type: string, default: repo name"
+#   env: #"Elastic Beanstalk environment name to be updated. — type: string" //recall that you created an enviroment when creating elastic beanstalk
+#   on:
+#     branch: master #tell travic CI to only deploy from master branch https://docs.travis-ci.com/user/deployment-v2/conditional
