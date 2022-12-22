@@ -11,6 +11,13 @@ after_success:
   - docker build -t chuk05/multi-ngnix ./nginx
   - docker build -t chuk05/multi-server ./server
   - docker build -t chuk05/multi-worker ./worker
+# log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Take above images and push them to docker hub
+  - docker push chuk05/multi-client
+  - docker push chuk05/multi-ngnix 
+  - docker push chuk05/multi-server
+  - docker push chuk05/multi-worker
 # deploy:
 #   provider: elasticbeanstalk
 #   # user settings/Enviromental variables/*add* access_key_id and then secret_access_key to define your secrets
