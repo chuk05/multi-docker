@@ -18,17 +18,17 @@ after_success:
   - docker push chuk05/multi-ngnix 
   - docker push chuk05/multi-server
   - docker push chuk05/multi-worker
-# deploy:
-#   provider: elasticbeanstalk
-#   # user settings/Enviromental variables/*add* access_key_id and then secret_access_key to define your secrets
-#   access_key_id: #$"env_name"
-#   secret_access_key: #$"env_name"
-#   # env_name ends
-#   bucket: #"bucket beanstalk created when provisioning your enviroment"
-#   bucket_path: #"Location within Bucket to upload app to — type: string"
-#   edge: true # opt in to dpl v2
-#   region: #"AWS Region the Elastic Beanstalk app is running in — type: string, default: us-east-1"
-#   app: #"Elastic Beanstalk application name — type: string, default: repo name"
-#   env: #"Elastic Beanstalk environment name to be updated. — type: string" //recall that you created an enviroment when creating elastic beanstalk
-#   on:
-#     branch: master #tell travic CI to only deploy from master branch https://docs.travis-ci.com/user/deployment-v2/conditional
+deploy:
+  provider: elasticbeanstalk
+  # user settings/Enviromental variables/*add* access_key_id and then secret_access_key to define your secrets
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  # env_name ends
+  bucket: "elasticbeanstalk-us-east-1-889306573262"
+  bucket_path: "docker"
+  edge: true # opt in to dpl v2
+  region: "us-east-1"
+  app: "multi-docker"
+  env: "Multidocker-env"
+  on:
+    branch: master
